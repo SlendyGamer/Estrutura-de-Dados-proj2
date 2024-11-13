@@ -2,46 +2,54 @@
 #include <stdlib.h>
 #include <locale.h>
 #include <string.h>
+#include "arvores.h"
 
 int main()
 {
     setlocale(LC_ALL,"portuguese");
     FILE *file, *newFile;
-    char line[80];
+    char line[90];
+    Info info;
+    Arv* A = criaArv();
+    if (A == NULL)
+    {
+        printf("erro");
+    }
 
     file = fopen("Dados.txt", "r");
-    newFile = fopen("novosDados.txt", "w");
+    //newFile = fopen("novosDados.txt", "w");
 
     if (file == NULL)
     {
         printf("arquivo antigo nao encontrado");
         return 2;
     }
-    else if (newFile == NULL)
-    {
-        printf("arquivo novo nao criado");
-        return 2;
-    }
+    //else if (newFile == NULL)
+    //{
+    //    printf("arquivo novo nao criado");
+    //    return 2;
+    //}
     else
     {
-        int int1, int2, num;
-        char string1[39], string2[24];
-        float float1;
+        int n;
 
         if (fgets(line,sizeof(line), file) != NULL)
         {
-        sscanf(line, "%d", &num);
+        sscanf(line, "%d", &n);
         }
+        //printf("%d\n", n);
         while (fgets(line,sizeof(line), file) != NULL)
         {
-            sscanf(line, "%d %38[^\n] %d %23[^\n] %f", &int1, string1, &int2, string2, &float1);
-            printf("escaneado: %d  %s  %d  %s %.2f\n", int1, string1, int2, string2, float1); //sucesso
-            fprintf(newFile, "%d %s %d %s %.2f\n", int1, string1, int2, string2, float1);
-
+            sscanf(line, "%d %39[^\n] %d %24[^\n] %f", &info.matricula, info.nome, &info.idade, info.cargo, &info.salario);
+            insereArv(A, info);
+            //printf("escaneado: %d  %s  %d  %s %.2f\n", info.matricula, info.nome, info.idade, info.cargo, info.salario); //sucesso
+            //fprintf(newFile, "%d %s %d %s %.2f\n", int1, string1, int2, string2, float1);
+            //n--;
         }
-        printf("%d\n", num);
+        ImprimeArv(A);
         fclose(file);
-        fclose(newFile);
+        liberaArv(A);
+        //fclose(newFile);
         printf("sucesso");
     }
 }

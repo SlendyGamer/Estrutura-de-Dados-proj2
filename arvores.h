@@ -45,10 +45,10 @@
  {
      if (A->raiz == NULL || A == NULL)
      {
-         printf("\narvore vazia!\n");
+         //printf("\narvore vazia!\n");
          return 1;
      }
-     printf("\narvore ocupada!\n");
+     //printf("\narvore ocupada!\n");
      return 0;
  }
 
