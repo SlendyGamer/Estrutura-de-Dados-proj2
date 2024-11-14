@@ -43,7 +43,7 @@
 
  int vaziaArv(Arv* A)
  {
-     if (A->raiz == NULL || A == NULL)
+     if (A->raiz == NULL)
      {
          //printf("\narvore vazia!\n");
          return 1;
@@ -110,23 +110,23 @@
      A->raiz = insereAux(A->raiz, info);
  }
 
- NoArv* removeAux(NoArv *pai, Info info)
+ NoArv* removeAux(NoArv *pai, int matricula)
  {
      if (pai == NULL)
      {
-         printf("\nnao existe matricula %d na arvore!\n", info.matricula);
+         printf("\nnao existe matricula %d na arvore!\n", matricula);
      }
      else
      {
-        if (info.matricula > pai->dado.matricula)
+        if (matricula > pai->dado.matricula)
         {
-            pai->dir = removeAux(pai->dir, info);
+            pai->dir = removeAux(pai->dir, matricula);
         }
         else
         {
-            if (info.matricula < pai->dado.matricula)
+            if (matricula < pai->dado.matricula)
             {
-                pai->esq = removeAux(pai->esq, info);
+                pai->esq = removeAux(pai->esq, matricula);
             }
             else
             {
@@ -160,8 +160,8 @@
                                 aux = aux->dir;
                             }
                             pai->dado.matricula = aux->dado.matricula;
-                            aux->dado.matricula = info.matricula;
-                            pai->esq = removeAux(pai->esq, info);
+                            aux->dado.matricula = matricula;
+                            pai->esq = removeAux(pai->esq, matricula);
                         }
                     }
                 }
@@ -173,17 +173,17 @@
 
 
 
- Arv* removeArv(Arv *A, Info info)
+ Arv* removeArv(Arv *A, int matricula)
  {
      NoArv *aux = A->raiz;
-     if (aux->dado.matricula == info.matricula && (aux->dir == NULL && aux ->esq == NULL))
+     if (aux->dado.matricula == matricula && (aux->dir == NULL && aux ->esq == NULL))
      {
          free(aux);
          //free(A);
          A->raiz=NULL;
          return A;
      }
-     A->raiz = removeAux(A->raiz, info);
+     A->raiz = removeAux(A->raiz, matricula);
      return A;
  }
 
@@ -202,7 +202,7 @@
      if (!vaziaArv(A))
      {
          NoArv *nA = A->raiz;
-         printf("%d  %s  %d  %s %.2f\n", nA->dado.matricula, nA->dado.nome, nA->dado.idade, nA->dado.cargo, nA->dado.salario);
+         printf("%d  %-39s  %d  %-24s %.2f\n", nA->dado.matricula, nA->dado.nome, nA->dado.idade, nA->dado.cargo, nA->dado.salario);
          ImprimeAux(nA->dir);
          ImprimeAux(nA->esq);
      }
