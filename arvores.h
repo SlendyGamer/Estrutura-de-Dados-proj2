@@ -187,26 +187,65 @@
      return A;
  }
 
- void ImprimeAux(NoArv* nA)
+ void ImprimeAuxPre(NoArv* nA)
  {
     if (nA != NULL)
      {
-         printf("%d  %-39s  %d  %-24s %.2f\n", nA->dado.matricula, nA->dado.nome, nA->dado.idade, nA->dado.cargo, nA->dado.salario);
-         ImprimeAux(nA->dir);
-         ImprimeAux(nA->esq);
+        printf("%d  %-39s  %d  %-24s %.2f\n", nA->dado.matricula, nA->dado.nome, nA->dado.idade, nA->dado.cargo, nA->dado.salario);
+        ImprimeAuxPre(nA->dir);
+        ImprimeAuxPre(nA->esq);
      }
  }
 
- void ImprimeArv(Arv *A)
+ void ImprimeAuxIn(NoArv* nA)
+ {
+    if (nA != NULL)
+     {
+        ImprimeAuxIn(nA->dir);
+        printf("%d  %-39s  %d  %-24s %.2f\n", nA->dado.matricula, nA->dado.nome, nA->dado.idade, nA->dado.cargo, nA->dado.salario);
+        ImprimeAuxIn(nA->esq);
+     }
+ }
+
+ void ImprimeAuxPos(NoArv* nA)
+ {
+    if (nA != NULL)
+     {
+        ImprimeAuxPos(nA->dir);
+        ImprimeAuxPos(nA->esq);
+        printf("%d  %-39s  %d  %-24s %.2f\n", nA->dado.matricula, nA->dado.nome, nA->dado.idade, nA->dado.cargo, nA->dado.salario);
+     }
+ }
+
+ void ImprimeArv(Arv *A, int type) //mudar nome para pre order
  {
      if (!vaziaArv(A))
      {
          NoArv *nA = A->raiz;
-         printf("%d  %-39s  %d  %-24s %.2f\n", nA->dado.matricula, nA->dado.nome, nA->dado.idade, nA->dado.cargo, nA->dado.salario);
-         ImprimeAux(nA->dir);
-         ImprimeAux(nA->esq);
+         switch(type)
+         {
+         case 1: //pre
+
+             printf("%d  %-39s  %d  %-24s %.2f\n", nA->dado.matricula, nA->dado.nome, nA->dado.idade, nA->dado.cargo, nA->dado.salario);
+             ImprimeAuxPre(nA->dir);
+             ImprimeAuxPre(nA->esq);
+             break;
+         case 2: //in
+             ImprimeAuxIn(nA->dir);
+             printf("%d  %-39s  %d  %-24s %.2f\n", nA->dado.matricula, nA->dado.nome, nA->dado.idade, nA->dado.cargo, nA->dado.salario);
+             ImprimeAuxIn(nA->esq);
+             break;
+         case 3: //pos
+             ImprimeAuxPos(nA->dir);
+             ImprimeAuxPos(nA->esq);
+             printf("%d  %-39s  %d  %-24s %.2f\n", nA->dado.matricula, nA->dado.nome, nA->dado.idade, nA->dado.cargo, nA->dado.salario);
+             break;
+         default:
+             break;
+         }
      }
  }
+
  NoArv* liberaAux(NoArv* nA)
  {
     if (nA != NULL)

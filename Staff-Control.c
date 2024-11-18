@@ -108,14 +108,28 @@ int main()
                 printf("Achar mais novo e mais velho\n");
                 break;
             case 7:
+                break;
+            case 8:
                 if (vaziaArv(A))
                 {
                     printf("\n\tarvore vazia\t");
                 }
                 else
                 {
-                    printf("1 - in, 2 - pre, 3 - pos");
-                    ImprimeArv(A);
+                    printf("\n1 - pre, 2 - in, 3 - pos\n\n");
+                    scanf("%d", &select);
+                    switch(select)
+                    {
+                    case 1: //pre
+                        ImprimeArv(A, 1);
+                        break;
+                    case 2: //in
+                        ImprimeArv(A, 2);
+                        break;
+                    case 3: //pos
+                        ImprimeArv(A, 3);
+                        break;
+                    }
                 }
                 break;
             case 0:
