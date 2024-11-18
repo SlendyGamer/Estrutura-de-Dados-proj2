@@ -6,6 +6,7 @@
 
 int main()
 {
+    setlocale(LC_ALL,"portuguese");
     int select, n, i = 0, buscaMatricula;
     FILE *dataFile, *mainFile, *newFile;
     char linha[90], buffer[40];
@@ -113,6 +114,7 @@ int main()
                 }
                 else
                 {
+                    printf("1 - in, 2 - pre, 3 - pos");
                     ImprimeArv(A);
                 }
                 break;

@@ -191,7 +191,7 @@
  {
     if (nA != NULL)
      {
-         printf("%d  %s  %d  %s %.2f\n", nA->dado.matricula, nA->dado.nome, nA->dado.idade, nA->dado.cargo, nA->dado.salario);
+         printf("%d  %-39s  %d  %-24s %.2f\n", nA->dado.matricula, nA->dado.nome, nA->dado.idade, nA->dado.cargo, nA->dado.salario);
          ImprimeAux(nA->dir);
          ImprimeAux(nA->esq);
      }
