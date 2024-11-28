@@ -18,14 +18,14 @@ int main()
         exit(2);
     }
 
-    mainFile = fopen("DadosSave.txt", "a +"); //a tem espaço entre +??
+    mainFile = fopen("DadosSave.txt", "a +"); //a tem espaï¿½o entre +??
     if (mainFile == NULL)
     {
-        printf("\n\tdados salvos não encontrados, inicializando nova árvore:\n");
+        printf("\n\tdados salvos nï¿½o encontrados, inicializando nova ï¿½rvore:\n");
     }
     else
     {
-        printf("aqui inicializarei a arvore com os dados já salvos\n");
+        printf("aqui inicializarei a arvore com os dados jï¿½ salvos\n");
     }
 
     do
@@ -37,7 +37,7 @@ int main()
                  "\t3:\tIncluir novo dado no sistema;\n"
                  "\t4:\tRemover dado do sistema;\n"
                  "\t5:\tBuscar por dado no sistema;\n"
-                 "\t6:\tBuscar por funcionário mais novo e mais velho;\n"
+                 "\t6:\tBuscar por funcionï¿½rio mais novo e mais velho;\n"
                  "\t7:\tVisualisar dados registrados no sistema;\n\n"
                  "\t0:\tSalvar e sair do programa.");
         select = -1;
@@ -46,7 +46,7 @@ int main()
         switch(select)
         {
             case 1:
-                printf("\n\tdigite o nome do arquivo(se estiver na mesma pasta) ou então o caminho para o arquivo:\t");
+                printf("\n\tdigite o nome do arquivo(se estiver na mesma pasta) ou entï¿½o o caminho para o arquivo:\t");
                 gets(buffer);
                 dataFile = fopen(buffer, "r +");
                 if (dataFile == NULL)
@@ -76,15 +76,19 @@ int main()
                 break;
             case 3:
                 scanf("%d", &dado.matricula);
+
                 fflush(stdin);
                 gets(buffer);
                 fflush(stdin);
                 strcpy(dado.nome, buffer);
+
                 scanf("%d", &dado.idade);
+
                 fflush(stdin);
                 gets(buffer);
                 fflush(stdin);
                 strcpy(dado.cargo, buffer);
+
                 scanf("%f", &dado.salario);
                 fflush(stdin);
                 insereArv(A, dado);
@@ -96,13 +100,16 @@ int main()
                 }
                 else
                 {
-                    printf("\n\tdigite a matrícula do usuário que deseja remover:\t");
+                    printf("\n\tdigite a matrï¿½cula do usuï¿½rio que deseja remover:\t");
                     scanf("%d", &buscaMatricula);
                     removeArv(A, buscaMatricula);
                 }
                 break;
             case 5:
-                printf("buscar\n");
+                printf("\n\tDigite a matricula do usuario que deseja procurar:\t");
+                scanf("%d", &buscaMatricula);
+                NoArv *busca = buscaArv(A -> raiz, buscaMatricula);
+                imprimeInfo(busca);
                 break;
             case 6:
                 printf("Achar mais novo e mais velho\n");

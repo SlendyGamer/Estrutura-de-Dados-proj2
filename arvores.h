@@ -187,6 +187,41 @@
      return A;
  }
 
+
+
+ NoArv* buscaArv(NoArv* pai, int matricula) {
+     if (pai == NULL) {
+         printf("\nNao existe matricula %d na arvore!\n", matricula);
+         return NULL;
+     }
+
+     if (matricula > pai->dado.matricula)
+     {
+         return buscaArv(pai->dir, matricula);
+     }
+     else
+     {
+        if (matricula < pai->dado.matricula)
+        {
+            return buscaArv(pai->esq, matricula);
+        }
+        else
+        {
+             return pai;
+        }
+    }
+ }
+
+
+void imprimeInfo(NoArv* pai)
+{
+    printf("\nMatricula: %d", pai -> dado.matricula);
+    printf("\nNome: %-39s", pai -> dado.nome);
+    printf("\nIdade: %d", pai -> dado.idade);
+    printf("\nCargo: %-24s", pai -> dado.cargo);
+    printf("\nSalario: %.2f", pai -> dado.salario);
+}
+
  void ImprimeAuxPre(NoArv* nA)
  {
     if (nA != NULL)
