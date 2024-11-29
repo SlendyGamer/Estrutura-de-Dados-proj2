@@ -73,7 +73,6 @@ int main()
 
                 break;
             case 2:
-                printf("atualizar\n");
                 fflush(stdin);
                 busca = editaNoArv(A->raiz, buscaMatricula);
                 break;
@@ -86,11 +85,41 @@ int main()
                 strcpy(dado.nome, buffer);
 
                 scanf("%d", &dado.idade);
-
+                do
+                {
                 fflush(stdin);
-                gets(buffer);
-                fflush(stdin);
-                strcpy(dado.cargo, buffer);
+                printf("defina o cargo de %-39s\n", dado.nome);
+                printf("1 - ANALISTA DE SISTEMAS\n");
+                printf("2 - ANALISTA DE SUPORTE\n");
+                printf("3 - PROGRAMADOR\n");
+                printf("4 - CONTADOR\n");
+                printf("5 - ADMINISTRATIVO\n");
+                printf("6 - GERENTE\n");
+                scanf("%d", &select);
+                switch(select)
+                {
+                    case 1:
+                        strcpy(dado.cargo, "ANALISTA DE SISTEMAS");
+                        break;
+                    case 2:
+                        strcpy(dado.cargo, "ANALISTA DE SUPORTE");
+                        break;
+                    case 3:
+                        strcpy(dado.cargo, "PROGRAMADOR");
+                        break;
+                    case 4:
+                        strcpy(dado.cargo, "CONTADOR");
+                        break;
+                    case 5:
+                        strcpy(dado.cargo, "ADMINISTRATIVO");
+                        break;
+                    case 6:
+                        strcpy(dado.cargo, "GERENTE");
+                        break;
+                    default:
+                        break;
+                }
+                } while (select == -1);
 
                 scanf("%f", &dado.salario);
                 fflush(stdin);
