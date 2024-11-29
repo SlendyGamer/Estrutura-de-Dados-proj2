@@ -24,16 +24,16 @@
  }Arv;
 
  /*
- criaArv() ok
- vaziaArv() ok
- insereArv() ok
+ arv_Criar() ok
+ arv_Vazia() ok
+ arv_Inserir() ok
  insereAux() ok
- removeArv() ok
+ arv_Remover() ok
  removeAux() ok
- liberaArv()
+ arv_Liberar()
  */
 
- Arv* criaArv()
+ Arv* arv_Criar()
  {
         Arv *aux;
         aux = (Arv*)malloc(sizeof(Arv));
@@ -41,7 +41,7 @@
         return aux;
  }
 
- int vaziaArv(Arv* A)
+ int arv_Vazia(Arv* A)
  {
      if (A->raiz == NULL)
      {
@@ -105,7 +105,7 @@
      return no;
  }
 
- void insereArv(Arv *A, Info info)
+ void arv_Inserir(Arv *A, Info info)
  {
      A->raiz = insereAux(A->raiz, info);
  }
@@ -173,7 +173,7 @@
 
 
 
- Arv* removeArv(Arv *A, int matricula)
+ Arv* arv_Remover(Arv *A, int matricula)
  {
      NoArv *aux = A->raiz;
      if (aux->dado.matricula == matricula && (aux->dir == NULL && aux ->esq == NULL))
@@ -212,6 +212,58 @@
     }
  }
 
+ NoArv* editaNoArv(NoArv* pai, int matricula)
+ {
+    pai = buscaArv(pai, matricula);
+    if (pai != NULL)
+    {
+        int select;
+        int idade;
+        float salario;
+        do
+        {
+            printf("\n\to que deseja editar?\n");
+            printf("1 - Nome\n");
+            printf("2 - Idade\n");
+            printf("3 - Cargo\n");
+            printf("4 - Salario\n");
+            scanf("%c", &select);
+
+            switch(select)
+            {
+                case 1:
+                    //pegar novo nome
+                    //pai->dado.nome
+                    break;
+                case 2:
+
+                    //pegar nova idade
+                    pai->dado.idade = idade;
+                    break;
+                case 3:
+                    //selecionar cargo
+                    //pai->dado.cargo
+                    break;
+                case 4:
+
+                    //pegar salario
+                    pai->dado.salario = salario;
+                    break;
+                default:
+                    break;
+            }
+        } while (select == -1);
+
+        return pai;
+    }
+    else
+    {
+        //arvore vazia
+        return NULL;
+    }
+
+ }
+
 
 void imprimeInfo(NoArv* pai)
 {
@@ -219,7 +271,7 @@ void imprimeInfo(NoArv* pai)
     printf("\nNome: %-39s", pai -> dado.nome);
     printf("\nIdade: %d", pai -> dado.idade);
     printf("\nCargo: %-24s", pai -> dado.cargo);
-    printf("\nSalario: %.2f", pai -> dado.salario);
+    printf("\nSalario: R$%.2f", pai -> dado.salario);
 }
 
  void ImprimeAuxPre(NoArv* nA)
@@ -254,7 +306,7 @@ void imprimeInfo(NoArv* pai)
 
  void ImprimeArv(Arv *A, int type) //mudar nome para pre order
  {
-     if (!vaziaArv(A))
+     if (!arv_Vazia(A))
      {
          NoArv *nA = A->raiz;
          switch(type)
@@ -293,9 +345,9 @@ void imprimeInfo(NoArv* pai)
      return NULL;
  }
 
- Arv* liberaArv(Arv *A)
+ Arv* arv_Liberar(Arv *A)
  {
-     if (!vaziaArv(A))
+     if (!arv_Vazia(A))
      {
          A->raiz = liberaAux(A->raiz);
          printf("tudo liberado\n");

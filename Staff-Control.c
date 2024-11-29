@@ -11,7 +11,8 @@ int main()
     FILE *dataFile, *mainFile, *newFile;
     char linha[90], buffer[40];
     Info dado;
-    Arv *A = criaArv();
+    NoArv *busca;
+    Arv *A = arv_Criar();
     if (A == NULL)
     {
         printf("erro de alocamento\n");
@@ -63,7 +64,7 @@ int main()
                     {
                         i++;
                         sscanf(linha, "%d %39[^\n] %d %24[^\n] %f", &dado.matricula, dado.nome, &dado.idade, dado.cargo, &dado.salario);
-                        insereArv(A, dado);
+                        arv_Inserir(A, dado);
                         printf("%d escaneado: %d  %s  %d  %s %.2f\n", i, dado.matricula, dado.nome, dado.idade, dado.cargo, dado.salario); //sucesso
                         //fprintf(newFile, "%d %s %d %s %.2f\n", int1, string1, int2, string2, float1);
                     }
@@ -73,6 +74,8 @@ int main()
                 break;
             case 2:
                 printf("atualizar\n");
+                fflush(stdin);
+                busca = editaNoArv(A->raiz, buscaMatricula);
                 break;
             case 3:
                 scanf("%d", &dado.matricula);
@@ -91,25 +94,28 @@ int main()
 
                 scanf("%f", &dado.salario);
                 fflush(stdin);
-                insereArv(A, dado);
+                arv_Inserir(A, dado);
                 break;
             case 4:
-                if (vaziaArv(A))
+                if (arv_Vazia(A))
                 {
                     printf("\n\tarvore vazia\t");
                 }
                 else
                 {
-                    printf("\n\tdigite a matr�cula do usu�rio que deseja remover:\t");
+                    printf("\n\tdigite a matricula do usuario que deseja remover:\t");
                     scanf("%d", &buscaMatricula);
-                    removeArv(A, buscaMatricula);
+                    arv_Remover(A, buscaMatricula);
                 }
                 break;
             case 5:
                 printf("\n\tDigite a matricula do usuario que deseja procurar:\t");
                 scanf("%d", &buscaMatricula);
-                NoArv *busca = buscaArv(A -> raiz, buscaMatricula);
-                imprimeInfo(busca);
+                busca = buscaArv(A->raiz, buscaMatricula);
+                if (busca != NULL)
+                {
+                    imprimeInfo(busca);
+                }
                 break;
             case 6:
                 printf("Achar mais novo e mais velho\n");
@@ -117,7 +123,7 @@ int main()
             case 7:
                 break;
             case 8:
-                if (vaziaArv(A))
+                if (arv_Vazia(A))
                 {
                     printf("\n\tarvore vazia\t");
                 }
@@ -147,6 +153,6 @@ int main()
                 break;
             }
     } while (select != 0);
-    liberaArv(A);
+    arv_Liberar(A);
     return 0;
 }
