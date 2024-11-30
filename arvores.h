@@ -41,6 +41,11 @@
         return aux;
  }
 
+ void removeCR(char charVet[])
+ {
+     charVet[strcspn(charVet, "\r\n")] = 0;
+ }
+
  int arv_Vazia(Arv* A)
  {
      if (A->raiz == NULL)
@@ -99,6 +104,11 @@
                      pai->esq = novo;
                      end_flag = 1;
                  }
+             }
+             else
+             {
+                 printf("matricula ja existente detectada, ignorando...\n");
+                 end_flag = 1;
              }
          }
      }
@@ -171,7 +181,109 @@
     return pai;
  }
 
+ int setMatricula()
+ {
+     int matricula;
+     do
+        {
+            printf("\n\tMatrícula:\n");
+            printf("\\:\t");
+            matricula = -1;
+            fflush(stdin);
+            if (scanf("%d", &matricula) != 1) {
+                printf("\n\tErro\n\n");
+            }
+        } while (matricula <= 0 || matricula > 9999); //printar em formato 0000
 
+     return matricula;
+ }
+
+ void setNome(char *nome)
+ {
+     char buffer[40];
+     printf("\n\tNome:\n");
+     printf("\\:\t");
+     fflush(stdin);
+     fgets(buffer, 38, stdin); //hmmm
+     removeCR(buffer);
+     strcpy(nome, buffer);
+ }
+
+ int setIdade()
+ {
+     int idade;
+     do
+        {
+            printf("\n\tIdade:\n");
+            printf("\\:\t");
+            idade = -1;
+            fflush(stdin);
+            if (scanf("%d", &idade) != 1) {
+                printf("\n\tErro\n\n");
+            }
+        } while (idade <= 0);
+
+     return idade;
+ }
+
+ void setCargo(char *cargo, char nome[])
+ {
+     int select;
+     do
+        {
+            select = -1;
+            printf("\n\tDefina o cargo de %-40s\n", nome);
+            printf("\t1 - ANALISTA DE SISTEMAS\n");
+            printf("\t2 - ANALISTA DE SUPORTE\n");
+            printf("\t3 - PROGRAMADOR\n");
+            printf("\t4 - CONTADOR\n");
+            printf("\t5 - ADMINISTRATIVO\n");
+            printf("\t6 - GERENTE\n\n");
+            printf("\\:\t");
+            fflush(stdin);
+            scanf("%d", &select);
+            switch(select)
+            {
+                case 1:
+                    strcpy(cargo, "ANALISTA DE SISTEMAS");
+                    break;
+                case 2:
+                    strcpy(cargo, "ANALISTA DE SUPORTE");
+                    break;
+                case 3:
+                    strcpy(cargo, "PROGRAMADOR");
+                    break;
+                case 4:
+                    strcpy(cargo, "CONTADOR");
+                    break;
+                case 5:
+                    strcpy(cargo, "ADMINISTRATIVO");
+                    break;
+                case 6:
+                    strcpy(cargo, "GERENTE");
+                    break;
+                default:
+                    printf("erro\n");
+                    break;
+            }
+        } while (select < 1 || select > 6);
+ }
+
+ float setSalario()
+ {
+     float salario;
+     do
+        {
+            printf("\n\tSalário:\n");
+            printf("\\:\t");
+            salario = -1;
+            fflush(stdin);
+            if (scanf("%f", &salario) != 1) {
+                printf("erro\n");
+            }
+        } while(salario <= 0);
+     return salario;
+ }
 
  Arv* arv_Remover(Arv *A, int matricula)
  {
@@ -212,54 +324,75 @@
     }
  }
 
- NoArv* editaNoArv(NoArv* pai, int matricula)
- {
-    pai = buscaArv(pai, matricula);
-    if (pai != NULL)
-    {
-        int select;
-        int idade;
-        float salario;
+ NoArv* editaBuscaArv(NoArv* pai, int matricula) {
+     if (pai == NULL) {
+         printf("\nNao existe matricula %d na arvore!\n", matricula);
+         return NULL;
+     }
+    printf("editabusca\n");
+     if (matricula > pai->dado.matricula)
+     {
+         printf("dir\n");
+         return editaBuscaArv(pai->dir, matricula);
+     }
+     else
+     {
+        if (matricula < pai->dado.matricula)
+        {
+            printf("esq\n");
+            return editaBuscaArv(pai->esq, matricula);
+        }
+        else
+        {
+            printf("achou\n");
+             int select;
         do
         {
+            select = -1;
             printf("\n\to que deseja editar?\n");
-            printf("1 - Nome\n");
-            printf("2 - Idade\n");
-            printf("3 - Cargo\n");
-            printf("4 - Salario\n");
-            scanf("%c", &select);
+            printf("\t1 - Nome\n");
+            printf("\t2 - Idade\n");
+            printf("\t3 - Cargo\n");
+            printf("\t4 - Salario\n");
+            fflush(stdin);
+            scanf("%d", &select);
 
             switch(select)
             {
                 case 1:
-                    //pegar novo nome
-                    //pai->dado.nome
+                    setNome(pai->dado.nome);
                     break;
                 case 2:
-
-                    //pegar nova idade
-                    pai->dado.idade = idade;
+                    pai->dado.idade = setIdade();
                     break;
                 case 3:
-                    //selecionar cargo
-                    //pai->dado.cargo
+                    setCargo(pai->dado.cargo, pai->dado.nome);
                     break;
                 case 4:
-
-                    //pegar salario
-                    pai->dado.salario = salario;
+                    pai->dado.salario = setSalario();
                     break;
                 default:
+                    printf("\n\tErro\n");
                     break;
             }
-        } while (select == -1);
-
+        } while (select <1 || select > 4);
         return pai;
+        }
+    }
+ }
+
+
+
+ void editaArv(Arv* pai, int matricula)
+ {
+    if (pai != NULL)
+    {
+        printf("editaarv\n");
+        editaBuscaArv(pai->raiz, matricula);
     }
     else
     {
         //arvore vazia
-        return NULL;
     }
 
  }
@@ -267,10 +400,10 @@
 
 void imprimeInfo(NoArv* pai)
 {
-    printf("\nMatricula: %d", pai -> dado.matricula);
-    printf("\nNome: %-39s", pai -> dado.nome);
+    printf("\nMatricula: %04d", pai -> dado.matricula);
+    printf("\nNome: %-38s", pai -> dado.nome);
     printf("\nIdade: %d", pai -> dado.idade);
-    printf("\nCargo: %-24s", pai -> dado.cargo);
+    printf("\nCargo: %-23s", pai -> dado.cargo);
     printf("\nSalario: R$%.2f", pai -> dado.salario);
 }
 
@@ -278,7 +411,7 @@ void imprimeInfo(NoArv* pai)
  {
     if (nA != NULL)
      {
-        printf("%d  %-39s  %d  %-24s %.2f\n", nA->dado.matricula, nA->dado.nome, nA->dado.idade, nA->dado.cargo, nA->dado.salario);
+        printf("%04d  %-38s  %d  %-23s %.2f\n", nA->dado.matricula, nA->dado.nome, nA->dado.idade, nA->dado.cargo, nA->dado.salario);
         ImprimeAuxPre(nA->dir);
         ImprimeAuxPre(nA->esq);
      }
@@ -289,7 +422,7 @@ void imprimeInfo(NoArv* pai)
     if (nA != NULL)
      {
         ImprimeAuxIn(nA->dir);
-        printf("%d  %-39s  %d  %-24s %.2f\n", nA->dado.matricula, nA->dado.nome, nA->dado.idade, nA->dado.cargo, nA->dado.salario);
+        printf("%04d  %-38s  %d  %-23s %.2f\n", nA->dado.matricula, nA->dado.nome, nA->dado.idade, nA->dado.cargo, nA->dado.salario);
         ImprimeAuxIn(nA->esq);
      }
  }
@@ -300,32 +433,33 @@ void imprimeInfo(NoArv* pai)
      {
         ImprimeAuxPos(nA->dir);
         ImprimeAuxPos(nA->esq);
-        printf("%d  %-39s  %d  %-24s %.2f\n", nA->dado.matricula, nA->dado.nome, nA->dado.idade, nA->dado.cargo, nA->dado.salario);
+        printf("%04d  %-38s  %d  %-23s %.2f\n", nA->dado.matricula, nA->dado.nome, nA->dado.idade, nA->dado.cargo, nA->dado.salario);
      }
  }
 
- void ImprimeArv(Arv *A, int type) //mudar nome para pre order
+ void ImprimeArv(Arv *A, int type)
  {
      if (!arv_Vazia(A))
      {
          NoArv *nA = A->raiz;
+         printf("Matricula Nome\t\t\tIdade\tcargo\t\tsalario\n");
          switch(type)
          {
          case 1: //pre
 
-             printf("%d  %-39s  %d  %-24s %.2f\n", nA->dado.matricula, nA->dado.nome, nA->dado.idade, nA->dado.cargo, nA->dado.salario);
+             printf("%04d  %-38s  %d  %-23s %.2f\n", nA->dado.matricula, nA->dado.nome, nA->dado.idade, nA->dado.cargo, nA->dado.salario);
              ImprimeAuxPre(nA->dir);
              ImprimeAuxPre(nA->esq);
              break;
          case 2: //in
              ImprimeAuxIn(nA->dir);
-             printf("%d  %-39s  %d  %-24s %.2f\n", nA->dado.matricula, nA->dado.nome, nA->dado.idade, nA->dado.cargo, nA->dado.salario);
+             printf("%04d  %-38s  %d  %-23s %.2f\n", nA->dado.matricula, nA->dado.nome, nA->dado.idade, nA->dado.cargo, nA->dado.salario);
              ImprimeAuxIn(nA->esq);
              break;
          case 3: //pos
              ImprimeAuxPos(nA->dir);
              ImprimeAuxPos(nA->esq);
-             printf("%d  %-39s  %d  %-24s %.2f\n", nA->dado.matricula, nA->dado.nome, nA->dado.idade, nA->dado.cargo, nA->dado.salario);
+             printf("%04d  %-38s  %d  %-23s %.2f\n", nA->dado.matricula, nA->dado.nome, nA->dado.idade, nA->dado.cargo, nA->dado.salario);
              break;
          default:
              break;
@@ -333,26 +467,81 @@ void imprimeInfo(NoArv* pai)
      }
  }
 
- NoArv* liberaAux(NoArv* nA)
+ NoArv* maiorMenorAux(NoArv *A, NoArv** maior, NoArv** menor)
+ {
+     if (A != NULL)
+     {
+         if (A->dado.idade > (*maior)->dado.idade)
+         {
+             *maior = A;
+         }
+         else if (A->dado.idade < (*menor)->dado.idade)
+         {
+             *menor = A;
+         }
+         maiorMenorAux(A->dir, maior, menor);
+         maiorMenorAux(A->esq, maior, menor);
+     }
+
+ }
+
+ void arv_MaiorMenorIdade(Arv *A, NoArv** maior, NoArv** menor)
+ {
+     if (!arv_Vazia(A))
+     {
+         *maior = A->raiz;
+         *menor = A->raiz;
+         maiorMenorAux(A->raiz->dir, maior, menor);
+         maiorMenorAux(A->raiz->esq, maior, menor);
+     }
+ }
+
+ void arv_FiltrarCargo(NoArv* A, char cargo[])
+ {
+     if (A != NULL)
+     {
+         if (strncmp(cargo, A->dado.cargo, strlen(cargo)) == 0)
+         {
+             printf("func");
+             imprimeInfo(A);
+             printf("\n");
+         }
+         arv_FiltrarCargo(A->dir, cargo);
+         arv_FiltrarCargo(A->esq, cargo);
+     }
+ }
+
+ NoArv* liberaAux(NoArv* nA, FILE* dataFile)
  {
     if (nA != NULL)
      {
-         liberaAux(nA->dir);
-         liberaAux(nA->esq);
+         liberaAux(nA->dir, dataFile);
+         liberaAux(nA->esq, dataFile);
+         fprintf(dataFile, "%04d %-38s %d %-23s %.2f\n", nA->dado.matricula, nA->dado.nome, nA->dado.idade, nA->dado.cargo, nA->dado.salario);
          free(nA);
          printf("no liberado\n");
      }
      return NULL;
  }
 
- Arv* arv_Liberar(Arv *A)
+ Arv* arv_Liberar(Arv *A, int n)
  {
      if (!arv_Vazia(A))
      {
-         A->raiz = liberaAux(A->raiz);
-         printf("tudo liberado\n");
-     }
+         FILE* dataFile = fopen("DadosSalvos.txt", "w");
+         if (dataFile == NULL)
+         {
+             printf("\n\terro de salvamento\n");
+         }
+         else
+         {
+            fprintf(dataFile, "%d\n", n);
+            A->raiz = liberaAux(A->raiz, dataFile);
+            printf("tudo liberado\n");
+            fclose(dataFile);
+         }
      return A;
+     }
  }
 
 #endif // ARVORES_H_INCLUDED
