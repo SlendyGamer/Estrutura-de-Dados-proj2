@@ -277,7 +277,6 @@
      if (aux->dado.matricula == matricula && (aux->dir == NULL && aux ->esq == NULL))
      {
          free(aux);
-         //free(A);
          A->raiz=NULL;
          return A;
      }

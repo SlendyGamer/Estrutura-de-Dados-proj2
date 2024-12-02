@@ -20,7 +20,7 @@ int main()
         exit(2);
     }
 
-    dataFile= fopen("DadosSalvos.txt", "r"); //a tem espaï¿½o entre +??
+    dataFile= fopen("DadosSalvos.txt", "r");
     if (dataFile == NULL)
     {
         printf("\n\tdados salvos não encontrados, inicializando nova árvore vazia!\n");
