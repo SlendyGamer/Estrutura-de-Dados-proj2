@@ -4,9 +4,9 @@
  typedef struct Info
  {
      int matricula;
-     char nome[41];
+     char nome[40];
      int idade;
-     char cargo[26];
+     char cargo[25];
      float salario;
  }Info;
 
@@ -22,16 +22,6 @@
  {
      NoArv *raiz;
  }Arv;
-
- /*
- arv_Criar() ok
- arv_Vazia() ok
- arv_Inserir() ok
- insereAux() ok
- arv_Remover() ok
- removeAux() ok
- arv_Liberar()
- */
 
  Arv* arv_Criar()
  {
@@ -50,10 +40,8 @@
  {
      if (A->raiz == NULL)
      {
-         //printf("\narvore vazia!\n");
          return 1;
      }
-     //printf("\narvore ocupada!\n");
      return 0;
  }
 
@@ -107,7 +95,7 @@
              }
              else
              {
-                 printf("matricula ja existente detectada, ignorando...\n");
+                 printf("\n\tDuplicata detectada! ignorando...");
                  end_flag = 1;
              }
          }
@@ -124,7 +112,7 @@
  {
      if (pai == NULL)
      {
-         printf("\nnao existe matricula %d na arvore!\n", matricula);
+         printf("\n\tNão existe matrícula %d na árvore!\n", matricula);
      }
      else
      {
@@ -143,7 +131,8 @@
                 if (pai->dir == NULL && pai->esq == NULL)
                 {
                      free(pai);
-                     pai = NULL; //por que?
+                     pai = NULL;
+                     printf("\n\tMatrícula %d removida da árvore!\n", matricula);
                 }
                 else
                 {
@@ -152,6 +141,7 @@
                         NoArv *aux = pai;
                         pai = pai->dir;
                         free(aux);
+                        printf("\n\tMatrícula %d removida da árvore!\n", matricula);
                     }
                     else
                     {
@@ -160,6 +150,7 @@
                             NoArv *aux = pai;
                             pai = pai->esq;
                             free(aux);
+                            printf("\n\tMatrícula %d removida da árvore!\n", matricula);
                         }
                         else
                         {
@@ -186,14 +177,13 @@
      int matricula;
      do
         {
-            printf("\n\tMatrícula:\n");
-            printf("\\:\t");
+            printf("\n\\:\t");
             matricula = -1;
             fflush(stdin);
-            if (scanf("%d", &matricula) != 1) {
-                printf("\n\tErro\n\n");
+            if (scanf("%d", &matricula) != 1 || (matricula <=0 || matricula > 9999)) {
+                printf("\n\tErro\n");
             }
-        } while (matricula <= 0 || matricula > 9999); //printar em formato 0000
+        } while (matricula <= 0 || matricula > 9999);
 
      return matricula;
  }
@@ -201,10 +191,9 @@
  void setNome(char *nome)
  {
      char buffer[40];
-     printf("\n\tNome:\n");
-     printf("\\:\t");
+     printf("\n\\:\t");
      fflush(stdin);
-     fgets(buffer, 38, stdin); //hmmm
+     fgets(buffer, 38, stdin);
      removeCR(buffer);
      strcpy(nome, buffer);
  }
@@ -214,8 +203,7 @@
      int idade;
      do
         {
-            printf("\n\tIdade:\n");
-            printf("\\:\t");
+            printf("\n\\:\t");
             idade = -1;
             fflush(stdin);
             if (scanf("%d", &idade) != 1) {
@@ -226,20 +214,19 @@
      return idade;
  }
 
- void setCargo(char *cargo, char nome[])
+ void setCargo(char *cargo)
  {
      int select;
      do
         {
             select = -1;
-            printf("\n\tDefina o cargo de %-40s\n", nome);
             printf("\t1 - ANALISTA DE SISTEMAS\n");
             printf("\t2 - ANALISTA DE SUPORTE\n");
             printf("\t3 - PROGRAMADOR\n");
             printf("\t4 - CONTADOR\n");
             printf("\t5 - ADMINISTRATIVO\n");
-            printf("\t6 - GERENTE\n\n");
-            printf("\\:\t");
+            printf("\t6 - GERENTE\n");
+            printf("\n\\:\t");
             fflush(stdin);
             scanf("%d", &select);
             switch(select)
@@ -274,8 +261,7 @@
      float salario;
      do
         {
-            printf("\n\tSalário:\n");
-            printf("\\:\t");
+            printf("\n\\:\t");
             salario = -1;
             fflush(stdin);
             if (scanf("%f", &salario) != 1) {
@@ -329,22 +315,18 @@
          printf("\nNao existe matricula %d na arvore!\n", matricula);
          return NULL;
      }
-    printf("editabusca\n");
      if (matricula > pai->dado.matricula)
      {
-         printf("dir\n");
          return editaBuscaArv(pai->dir, matricula);
      }
      else
      {
         if (matricula < pai->dado.matricula)
         {
-            printf("esq\n");
             return editaBuscaArv(pai->esq, matricula);
         }
         else
         {
-            printf("achou\n");
              int select;
         do
         {
@@ -354,21 +336,26 @@
             printf("\t2 - Idade\n");
             printf("\t3 - Cargo\n");
             printf("\t4 - Salario\n");
+            printf("\n\\:\t");
             fflush(stdin);
             scanf("%d", &select);
 
             switch(select)
             {
                 case 1:
+                    printf("\n\tNovo nome - AVISO: substituirá %-38s\n", pai->dado.nome);
                     setNome(pai->dado.nome);
                     break;
                 case 2:
+                    printf("\n\tNova idade de %-38s\n", pai->dado.nome);
                     pai->dado.idade = setIdade();
                     break;
                 case 3:
-                    setCargo(pai->dado.cargo, pai->dado.nome);
+                    printf("\n\tNovo cargo de %-38s\n", pai->dado.nome);
+                    setCargo(pai->dado.cargo);
                     break;
                 case 4:
+                    printf("\n\tNovo salário de %-38s\n", pai->dado.nome);
                     pai->dado.salario = setSalario();
                     break;
                 default:
@@ -387,12 +374,7 @@
  {
     if (pai != NULL)
     {
-        printf("editaarv\n");
         editaBuscaArv(pai->raiz, matricula);
-    }
-    else
-    {
-        //arvore vazia
     }
 
  }
@@ -400,18 +382,15 @@
 
 void imprimeInfo(NoArv* pai)
 {
-    printf("\nMatricula: %04d", pai -> dado.matricula);
-    printf("\nNome: %-38s", pai -> dado.nome);
-    printf("\nIdade: %d", pai -> dado.idade);
-    printf("\nCargo: %-23s", pai -> dado.cargo);
-    printf("\nSalario: R$%.2f", pai -> dado.salario);
+    printf("\t%04d\t  | %-38s| %d     | %-23s | %.2f\n", pai->dado.matricula, pai->dado.nome, pai->dado.idade, pai->dado.cargo, pai->dado.salario);
+
 }
 
  void ImprimeAuxPre(NoArv* nA)
  {
     if (nA != NULL)
      {
-        printf("%04d  %-38s  %d  %-23s %.2f\n", nA->dado.matricula, nA->dado.nome, nA->dado.idade, nA->dado.cargo, nA->dado.salario);
+        imprimeInfo(nA);
         ImprimeAuxPre(nA->dir);
         ImprimeAuxPre(nA->esq);
      }
@@ -422,7 +401,7 @@ void imprimeInfo(NoArv* pai)
     if (nA != NULL)
      {
         ImprimeAuxIn(nA->dir);
-        printf("%04d  %-38s  %d  %-23s %.2f\n", nA->dado.matricula, nA->dado.nome, nA->dado.idade, nA->dado.cargo, nA->dado.salario);
+        imprimeInfo(nA);
         ImprimeAuxIn(nA->esq);
      }
  }
@@ -433,7 +412,7 @@ void imprimeInfo(NoArv* pai)
      {
         ImprimeAuxPos(nA->dir);
         ImprimeAuxPos(nA->esq);
-        printf("%04d  %-38s  %d  %-23s %.2f\n", nA->dado.matricula, nA->dado.nome, nA->dado.idade, nA->dado.cargo, nA->dado.salario);
+        imprimeInfo(nA);
      }
  }
 
@@ -442,24 +421,25 @@ void imprimeInfo(NoArv* pai)
      if (!arv_Vazia(A))
      {
          NoArv *nA = A->raiz;
-         printf("Matricula Nome\t\t\tIdade\tcargo\t\tsalario\n");
+         printf("\n\tMatrícula | Nome\t\t\t\t  | Idade  | Cargo\t\t     | Salário\n");
+         printf("\t----------------------------------------------------------------------------------------------\n");
          switch(type)
          {
          case 1: //pre
 
-             printf("%04d  %-38s  %d  %-23s %.2f\n", nA->dado.matricula, nA->dado.nome, nA->dado.idade, nA->dado.cargo, nA->dado.salario);
+             imprimeInfo(nA);
              ImprimeAuxPre(nA->dir);
              ImprimeAuxPre(nA->esq);
              break;
          case 2: //in
              ImprimeAuxIn(nA->dir);
-             printf("%04d  %-38s  %d  %-23s %.2f\n", nA->dado.matricula, nA->dado.nome, nA->dado.idade, nA->dado.cargo, nA->dado.salario);
+             imprimeInfo(nA);
              ImprimeAuxIn(nA->esq);
              break;
          case 3: //pos
              ImprimeAuxPos(nA->dir);
              ImprimeAuxPos(nA->esq);
-             printf("%04d  %-38s  %d  %-23s %.2f\n", nA->dado.matricula, nA->dado.nome, nA->dado.idade, nA->dado.cargo, nA->dado.salario);
+             imprimeInfo(nA);
              break;
          default:
              break;
@@ -500,13 +480,11 @@ void imprimeInfo(NoArv* pai)
  {
      if (A != NULL)
      {
+         arv_FiltrarCargo(A->dir, cargo);
          if (strncmp(cargo, A->dado.cargo, strlen(cargo)) == 0)
          {
-             printf("func");
              imprimeInfo(A);
-             printf("\n");
          }
-         arv_FiltrarCargo(A->dir, cargo);
          arv_FiltrarCargo(A->esq, cargo);
      }
  }
@@ -519,7 +497,7 @@ void imprimeInfo(NoArv* pai)
          liberaAux(nA->esq, dataFile);
          fprintf(dataFile, "%04d %-38s %d %-23s %.2f\n", nA->dado.matricula, nA->dado.nome, nA->dado.idade, nA->dado.cargo, nA->dado.salario);
          free(nA);
-         printf("no liberado\n");
+         printf("#");
      }
      return NULL;
  }
@@ -531,13 +509,13 @@ void imprimeInfo(NoArv* pai)
          FILE* dataFile = fopen("DadosSalvos.txt", "w");
          if (dataFile == NULL)
          {
-             printf("\n\terro de salvamento\n");
+             printf("\n\tErro de salvamento\n");
          }
          else
          {
             fprintf(dataFile, "%d\n", n);
             A->raiz = liberaAux(A->raiz, dataFile);
-            printf("tudo liberado\n");
+            printf("\n\tÁrvore liberada!\n");
             fclose(dataFile);
          }
      return A;
